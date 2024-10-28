@@ -8,19 +8,37 @@ import (
 
 // Values for colors
 const (
-	Blue       = "\033[34m"
-	Yellow     = "\033[33m"
-	Red        = "\033[31m"
-	Reset      = "\033[0m"
+	Blue         = "\033[34m"
+	Yellow       = "\033[33m"
+	Red          = "\033[31m"
+	Reset        = "\033[0m"
+	Default      = "\033[39m"
+	Black        = "\033[30m"
+	Green        = "\033[32m"
+	Magenta      = "\033[35m"
+	Cyan         = "\033[36m"
+	LightGray    = "\033[37m"
+	DarkGray     = "\033[90m"
+	LightRed     = "\033[91m"
+	LightGreen   = "\033[92m"
+	LightYellow  = "\033[93m"
+	LightBlue    = "\033[94m"
+	LightMagenta = "\033[95m"
+	LightCyan    = "\033[96m"
+	White        = "\033[97m"
+
 	DateFormat = "2006-01-02 15:04:05"
 )
 
 // Models
 type Handler struct {
-	time    time.Time
-	level   string
-	message string
-	format  int
+	time         time.Time
+	level        string
+	message      string
+	format       int
+	ColorInfo    string
+	ColorWarning string
+	ColorError   string
 }
 
 type message struct {
@@ -30,8 +48,21 @@ type message struct {
 }
 
 // NewLogger ...
-func NewLogger(format int) *Handler {
-	return &Handler{format: format}
+func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler {
+
+	if colorInfo == "" {
+		colorInfo = LightBlue
+	}
+
+	if colorWarning == "" {
+		colorWarning = LightYellow
+	}
+
+	if colorError == "" {
+		colorError = LightRed
+	}
+
+	return &Handler{format: format, ColorInfo: colorInfo, ColorWarning: colorWarning, ColorError: colorError}
 }
 
 // Internal Functions
@@ -42,13 +73,13 @@ func (l *Handler) logWithColor() {
 
 	switch l.level {
 	case "INFO":
-		color = Blue
+		color = ColorInfo
 	case "WARNING":
-		color = Yellow
+		color = ColorWarning
 	case "ERROR":
 		color = Red
 	default:
-		color = Reset
+		color = ColorError
 	}
 
 	messages := message{
