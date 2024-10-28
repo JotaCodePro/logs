@@ -46,6 +46,8 @@ type Handler struct {
 // NewLogger ...
 func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler {
 
+	ColorMap := map[string]string{
+		"Blue":         Blue,
 		"Yellow":       Yellow,
 		"Red":          Red,
 		"Reset":        Reset,
