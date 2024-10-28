@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	models "github.com/JotaCodePro/logs/models/message"
 )
 
 // Values for colors
@@ -41,26 +43,57 @@ type Handler struct {
 	ColorError   string
 }
 
-type message struct {
-	Level   string `json:"level"`
-	Time    string `json:"time"`
-	Message string `json:"msg"`
-}
-
 // NewLogger ...
 func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler {
 
+	ColorMap := map[string]string{
+		"Blue":         Blue,
+		"Yellow":       Yellow,
+		"Red":          Red,
+		"Reset":        Reset,
+		"Default":      Default,
+		"Black":        Black,
+		"Green":        Green,
+		"Magenta":      Magenta,
+		"Cyan":         Cyan,
+		"LightGray":    LightGray,
+		"DarkGray":     DarkGray,
+		"LightRed":     LightRed,
+		"LightGreen":   LightGreen,
+		"LightYellow":  LightYellow,
+		"LightBlue":    LightBlue,
+		"LightMagenta": LightMagenta,
+		"LightCyan":    LightCyan,
+		"White":        White,
+	}
+
 	if colorInfo == "" {
 		colorInfo = LightBlue
+		fmt.Println("Color no encontrado - INFO", colorInfo)
+	} else {
+		fmt.Println("INFO", colorInfo)
+		colorInfo, _ = ColorMap[colorInfo]
 	}
 
 	if colorWarning == "" {
 		colorWarning = LightYellow
+		fmt.Println("Color no encontrado - WAR", colorWarning)
+	} else {
+		fmt.Println("Warning", colorWarning)
+		colorWarning, _ = ColorMap[colorWarning]
 	}
 
 	if colorError == "" {
 		colorError = LightRed
+		fmt.Println("Color no encontrado - ERR	", colorError)
+	} else {
+
+		fmt.Println("ERROR", colorError)
+		colorError, _ = ColorMap[colorError]
+
 	}
+
+	// Buscar el valor en el mapa
 
 	return &Handler{format: format, ColorInfo: colorInfo, ColorWarning: colorWarning, ColorError: colorError}
 }
@@ -73,16 +106,16 @@ func (l *Handler) logWithColor() {
 
 	switch l.level {
 	case "INFO":
-		color = ColorInfo
+		color = l.ColorInfo
 	case "WARNING":
-		color = ColorWarning
+		color = l.ColorWarning
 	case "ERROR":
-		color = Red
+		color = l.ColorError
 	default:
-		color = ColorError
+		color = l.ColorError
 	}
 
-	messages := message{
+	messages := models.Message{
 		Level:   l.level,
 		Time:    l.time.Format(DateFormat),
 		Message: l.message,
