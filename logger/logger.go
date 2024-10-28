@@ -46,8 +46,6 @@ type Handler struct {
 // NewLogger ...
 func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler {
 
-	ColorMap := map[string]string{
-		"Blue":         Blue,
 		"Yellow":       Yellow,
 		"Red":          Red,
 		"Reset":        Reset,
@@ -69,7 +67,7 @@ func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler 
 
 	if colorInfo == "" {
 		colorInfo = LightBlue
-		fmt.Println("Color no encontrado - INFO", colorInfo)
+
 	} else {
 		fmt.Println("INFO", colorInfo)
 		colorInfo, _ = ColorMap[colorInfo]
@@ -77,7 +75,7 @@ func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler 
 
 	if colorWarning == "" {
 		colorWarning = LightYellow
-		fmt.Println("Color no encontrado - WAR", colorWarning)
+
 	} else {
 		fmt.Println("Warning", colorWarning)
 		colorWarning, _ = ColorMap[colorWarning]
@@ -85,7 +83,7 @@ func NewLogger(format int, colorInfo, colorWarning, colorError string) *Handler 
 
 	if colorError == "" {
 		colorError = LightRed
-		fmt.Println("Color no encontrado - ERR	", colorError)
+
 	} else {
 
 		fmt.Println("ERROR", colorError)
